@@ -4,9 +4,7 @@
     <div class="col-md-8 col-lg-6">
       <!-- Registration Card -->
       <div class="card shadow-lg border-0 rounded-4">
-        <div
-          class="card-header bg-success text-white text-center rounded-top-4 py-4"
-        >
+        <div class="card-header bg-success text-white text-center rounded-top-4 py-4">
           <h3 class="mb-0">
             <i class="fas fa-user-plus me-2"></i>Create Account
           </h3>
@@ -15,19 +13,11 @@
 
         <div class="card-body p-4">
           {% if messages %} {% for message in messages %}
-          <div
-            class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3"
-            role="alert"
-          >
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3" role="alert">
             <i
-              class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"
-            ></i>
+              class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
             {{ message }}
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="alert"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
           </div>
           {% endfor %} {% endif %}
 
@@ -37,26 +27,19 @@
             <div class="row g-3">
               <!-- Username -->
               <div class="col-md-6">
-                <label
-                  for="{{ form.username.id_for_label }}"
-                  class="form-label fw-bold"
-                >
+                <label for="{{ form.username.id_for_label }}" class="form-label fw-bold">
                   <i class="fas fa-user me-1 text-primary"></i>Username *
                 </label>
                 {{ form.username }} {% if form.username.errors %}
                 <div class="invalid-feedback d-block">
-                  {% for error in form.username.errors %} {{ error }} {% endfor
-                  %}
+                  {% for error in form.username.errors %} {{ error }} {% endfor %}
                 </div>
                 {% endif %}
               </div>
 
               <!-- Email -->
               <div class="col-md-6">
-                <label
-                  for="{{ form.email.id_for_label }}"
-                  class="form-label fw-bold"
-                >
+                <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">
                   <i class="fas fa-envelope me-1 text-primary"></i>Email *
                 </label>
                 {{ form.email }} {% if form.email.errors %}
@@ -68,42 +51,31 @@
 
               <!-- First Name -->
               <div class="col-md-6">
-                <label
-                  for="{{ form.first_name.id_for_label }}"
-                  class="form-label fw-bold"
-                >
+                <label for="{{ form.first_name.id_for_label }}" class="form-label fw-bold">
                   <i class="fas fa-id-card me-1 text-primary"></i>First Name *
                 </label>
                 {{ form.first_name }} {% if form.first_name.errors %}
                 <div class="invalid-feedback d-block">
-                  {% for error in form.first_name.errors %} {{ error }} {%
-                  endfor %}
+                  {% for error in form.first_name.errors %} {{ error }} {% endfor %}
                 </div>
                 {% endif %}
               </div>
 
               <!-- Last Name -->
               <div class="col-md-6">
-                <label
-                  for="{{ form.last_name.id_for_label }}"
-                  class="form-label fw-bold"
-                >
+                <label for="{{ form.last_name.id_for_label }}" class="form-label fw-bold">
                   <i class="fas fa-id-card me-1 text-primary"></i>Last Name *
                 </label>
                 {{ form.last_name }} {% if form.last_name.errors %}
                 <div class="invalid-feedback d-block">
-                  {% for error in form.last_name.errors %} {{ error }} {% endfor
-                  %}
+                  {% for error in form.last_name.errors %} {{ error }} {% endfor %}
                 </div>
                 {% endif %}
               </div>
 
               <!-- Role -->
               <div class="col-12">
-                <label
-                  for="{{ form.role.id_for_label }}"
-                  class="form-label fw-bold"
-                >
+                <label for="{{ form.role.id_for_label }}" class="form-label fw-bold">
                   <i class="fas fa-user-tag me-1 text-primary"></i>Role *
                 </label>
                 {{ form.role }} {% if form.role.errors %}
@@ -119,16 +91,12 @@
 
               <!-- Password 1 -->
               <div class="col-md-6">
-                <label
-                  for="{{ form.password1.id_for_label }}"
-                  class="form-label fw-bold"
-                >
+                <label for="{{ form.password1.id_for_label }}" class="form-label fw-bold">
                   <i class="fas fa-lock me-1 text-primary"></i>Password *
                 </label>
                 {{ form.password1 }} {% if form.password1.errors %}
                 <div class="invalid-feedback d-block">
-                  {% for error in form.password1.errors %} {{ error }} {% endfor
-                  %}
+                  {% for error in form.password1.errors %} {{ error }} {% endfor %}
                 </div>
                 {% endif %} {% if form.password1.help_text %}
                 <div class="form-text">
@@ -139,17 +107,13 @@
 
               <!-- Password 2 -->
               <div class="col-md-6">
-                <label
-                  for="{{ form.password2.id_for_label }}"
-                  class="form-label fw-bold"
-                >
+                <label for="{{ form.password2.id_for_label }}" class="form-label fw-bold">
                   <i class="fas fa-lock me-1 text-primary"></i>Confirm Password
                   *
                 </label>
                 {{ form.password2 }} {% if form.password2.errors %}
                 <div class="invalid-feedback d-block">
-                  {% for error in form.password2.errors %} {{ error }} {% endfor
-                  %}
+                  {% for error in form.password2.errors %} {{ error }} {% endfor %}
                 </div>
                 {% endif %}
               </div>
@@ -157,20 +121,14 @@
 
             <hr class="my-4" />
 
-            <button
-              type="submit"
-              class="btn btn-success btn-lg w-100 rounded-pill shadow-sm mb-3"
-            >
+            <button type="submit" class="btn btn-success btn-lg w-100 rounded-pill shadow-sm mb-3">
               <i class="fas fa-user-plus me-2"></i>Create Account
             </button>
           </form>
 
           <div class="text-center">
             <p class="text-muted mb-0">Already have an account?</p>
-            <a
-              href="{% url 'login' %}"
-              class="btn btn-outline-primary rounded-pill mt-2"
-            >
+            <a href="{% url 'login' %}" class="btn btn-outline-primary rounded-pill mt-2">
               <i class="fas fa-sign-in-alt me-1"></i>Login
             </a>
           </div>
@@ -190,28 +148,22 @@
               <div class="text-center p-3 bg-light rounded-3">
                 <i class="fas fa-utensils fa-2x text-warning mb-2"></i>
                 <h6 class="fw-bold">Chef</h6>
-                <small class="text-muted"
-                  >Full access to recipes, ingredients, and kitchen
-                  management</small
-                >
+                <small class="text-muted">Full access to recipes, ingredients, and kitchen
+                  management</small>
               </div>
             </div>
             <div class="col-md-4">
               <div class="text-center p-3 bg-light rounded-3">
                 <i class="fas fa-user-tie fa-2x text-primary mb-2"></i>
                 <h6 class="fw-bold">Manager</h6>
-                <small class="text-muted"
-                  >Access to inventory, suppliers, and task management</small
-                >
+                <small class="text-muted">Access to inventory, suppliers, and task management</small>
               </div>
             </div>
             <div class="col-md-4">
               <div class="text-center p-3 bg-light rounded-3">
                 <i class="fas fa-user fa-2x text-success mb-2"></i>
                 <h6 class="fw-bold">Staff</h6>
-                <small class="text-muted"
-                  >Basic access to view recipes and tasks</small
-                >
+                <small class="text-muted">Basic access to view recipes and tasks</small>
               </div>
             </div>
           </div>
