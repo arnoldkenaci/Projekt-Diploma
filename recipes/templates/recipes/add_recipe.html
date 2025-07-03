@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header text-white" style="background-color: #2C3E50;">
+            <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add Recipe</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Basic Info -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Recipe Name</label>
+                    <input type="text" name="name" id="name" class="form-control" value="{{ form.name.value }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="course_type" class="form-label">Course Type</label>
+                    <select name="course_type" id="course_type" class="form-select" required>
+                        <option value="starter" {% if form.course_type.value == 'starter' %}selected{% endif %}>Starter</option>
+                        <option value="main" {% if form.course_type.value == 'main' %}selected{% endif %}>Main Course</option>
+                        <option value="dessert" {% if form.course_type.value == 'dessert' %}selected{% endif %}>Dessert</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="prep_time" class="form-label">Prep Time</label>
+                    <input type="text" name="prep_time" id="prep_time" class="form-control" value="{{ form.prep_time.value }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="cook_time" class="form-label">Cook Time</label>
+                    <input type="text" name="cook_time" id="cook_time" class="form-control" value="{{ form.cook_time.value }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="portions" class="form-label">Portions</label>
+                    <input type="number" name="portions" id="portions" class="form-control" value="{{ form.portions.value }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select name="status" id="status" class="form-select" required>
+                        <option value="pending" {% if form.status.value == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="in_progress" {% if form.status.value == 'in_progress' %}selected{% endif %}>In Progress</option>
+                        <option value="completed" {% if form.status.value == 'completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Recipe Image</label>
+                    <input type="file" name="image" id="image" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Short Description</label>
+                    <textarea name="description" id="description" class="form-control" rows="2">{{ form.description.value }}</textarea>
+                </div>
+
+                <!-- Nutritional Info -->
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="calories" class="form-label">Calories</label>
+                        <input type="number" name="calories" id="calories" class="form-control" value="{{ form.calories.value }}">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="protein" class="form-label">Protein (g)</label>
+                        <input type="number" name="protein" id="protein" class="form-control" value="{{ form.protein.value }}">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="carbs" class="form-label">Carbohydrates (g)</label>
+                        <input type="number" name="carbs" id="carbs" class="form-control" value="{{ form.carbs.value }}">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="fats" class="form-label">Fats (g)</label>
+                        <input type="number" name="fats" id="fats" class="form-control" value="{{ form.fats.value }}">
+                    </div>
+                </div>
+
+                <!-- Preparation Sheet -->
+                <div class="mb-3">
+                    <label for="preparation" class="form-label">Preparation Sheet</label>
+                    <textarea name="preparation" id="preparation" class="form-control" rows="6">{{ form.preparation.value }}</textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-2"></i>Save Recipe
+                    </button>
+                    <a href="{% url 'recipe_list' %}" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

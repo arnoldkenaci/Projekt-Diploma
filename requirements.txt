@@ -1,0 +1,30 @@
+# Django Kitchen Management System Requirements
+
+# Core Django
+Django==5.2.0
+django-crispy-forms==2.1
+crispy-bootstrap5==0.7
+
+# Database
+psycopg2-binary==2.9.9
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# Image Processing
+Pillow==10.1.0
+
+# Testing
+pytest==7.4.3
+pytest-django==4.7.0
+
+# Code Quality
+black==23.11.0
+flake8==6.1.0
+
+# Production
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Additional Utilities
+django-extensions==3.2.3

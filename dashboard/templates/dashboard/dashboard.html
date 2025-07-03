@@ -1,0 +1,209 @@
+{% extends "base.html" %} {% block content %}
+<div class="container-fluid mt-4">
+  <!-- Summary Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-2 col-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <i class="fas fa-utensils fa-2x text-primary mb-2"></i>
+          <h5 class="card-title">Recipes</h5>
+          <h2 class="fw-bold">{{ recipe_count }}</h2>
+          <a href="{% url 'recipe_list' %}" class="stretched-link"></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <i class="fas fa-carrot fa-2x text-success mb-2"></i>
+          <h5 class="card-title">Ingredients</h5>
+          <h2 class="fw-bold">{{ ingredient_count }}</h2>
+          <a href="{% url 'ingredient_list' %}" class="stretched-link"></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <i class="fas fa-warehouse fa-2x text-warning mb-2"></i>
+          <h5 class="card-title">Inventory</h5>
+          <h2 class="fw-bold">{{ inventory_count }}</h2>
+          <a href="{% url 'inventory_list' %}" class="stretched-link"></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <i class="fas fa-tasks fa-2x text-info mb-2"></i>
+          <h5 class="card-title">Tasks</h5>
+          <h2 class="fw-bold">{{ task_count }}</h2>
+          <a href="{% url 'task_list' %}" class="stretched-link"></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <i class="fas fa-truck fa-2x text-secondary mb-2"></i>
+          <h5 class="card-title">Suppliers</h5>
+          <h2 class="fw-bold">{{ supplier_count }}</h2>
+          <a href="{% url 'supplier_list' %}" class="stretched-link"></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body">
+          <i class="fas fa-users fa-2x text-dark mb-2"></i>
+          <h5 class="card-title">Users</h5>
+          <h2 class="fw-bold">{{ user_count }}</h2>
+          <a href="/admin/auth/user/" class="stretched-link"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Recent Activity -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+          <i class="fas fa-history me-2"></i>Recent Activity
+        </div>
+        <div class="card-body">
+          <h6 class="fw-bold">Recent Recipes</h6>
+          <ul class="list-group mb-3">
+            {% for recipe in recent_recipes %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span>{{ recipe.name }}</span>
+              <span class="badge bg-primary"
+                >{{ recipe.created_at|date:"M d, H:i" }}</span
+              >
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No recent recipes.</li>
+            {% endfor %}
+          </ul>
+          <h6 class="fw-bold">Recent Ingredients</h6>
+          <ul class="list-group mb-3">
+            {% for ingredient in recent_ingredients %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span>{{ ingredient.name }}</span>
+              <span class="badge bg-success"
+                >{{ ingredient.date_created|date:"M d, H:i" }}</span
+              >
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No recent ingredients.</li>
+            {% endfor %}
+          </ul>
+          <h6 class="fw-bold">Recent Tasks</h6>
+          <ul class="list-group mb-3">
+            {% for task in recent_tasks %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span>{{ task.name }}</span>
+              <span class="badge bg-info"
+                >{{ task.date_created|date:"M d, H:i" }}</span
+              >
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No recent tasks.</li>
+            {% endfor %}
+          </ul>
+          <h6 class="fw-bold">Recent Suppliers</h6>
+          <ul class="list-group">
+            {% for supplier in recent_suppliers %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span>{{ supplier.name }}</span>
+              <span class="badge bg-secondary"
+                >{{ supplier.date_created|date:"M d, H:i" }}</span
+              >
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No recent suppliers.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stock Alerts & Task Overview -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-warning text-dark">
+          <i class="fas fa-exclamation-triangle me-2"></i>Stock Alerts
+        </div>
+        <div class="card-body">
+          <h6 class="fw-bold">Low/Out of Stock Ingredients</h6>
+          <ul class="list-group mb-3">
+            {% for ingredient in low_stock_ingredients %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span>{{ ingredient.name }}</span>
+              <span class="badge bg-danger"
+                >{{ ingredient.quantity }} {{ ingredient.unit }}</span
+              >
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">
+              No low/out of stock ingredients.
+            </li>
+            {% endfor %}
+          </ul>
+          <h6 class="fw-bold">Low/Out of Stock Inventory</h6>
+          <ul class="list-group mb-3">
+            {% for item in low_stock_inventory %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span>{{ item.name }}</span>
+              <span class="badge bg-danger"
+                >{{ item.quantity }} {{ item.unit }} ({{ item.status|title
+                }})</span
+              >
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">
+              No low/out of stock inventory items.
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+          <i class="fas fa-tasks me-2"></i>Task Overview
+        </div>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-4">
+              <h6>Open</h6>
+              <span class="badge bg-secondary fs-5">{{ open_tasks }}</span>
+            </div>
+            <div class="col-4">
+              <h6>In Progress</h6>
+              <span class="badge bg-warning text-dark fs-5"
+                >{{ in_progress_tasks }}</span
+              >
+            </div>
+            <div class="col-4">
+              <h6>Completed</h6>
+              <span class="badge bg-success fs-5">{{ completed_tasks }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

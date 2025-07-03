@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Supplier List Title -->
+    <div class="card shadow-lg">
+        <div class="card-header" style="background-color: #2C3E50; color: white;">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="fas fa-truck me-2"></i>Supplier Management</h4>
+                <div>
+                    <a href="{% url 'export_suppliers_csv' %}" class="btn btn-outline-light btn-sm me-2">
+                        <i class="fas fa-download me-1"></i>Export CSV
+                    </a>
+                    <a href="{% url 'add_supplier' %}" class="btn btn-success btn-sm">
+                        <i class="fas fa-plus-circle me-1"></i>Add Supplier
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <!-- Search and Filter Section -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <form method="get" class="d-flex">
+                        <input type="text" name="search" class="form-control me-2" 
+                               placeholder="Search suppliers..." 
+                               value="{{ search_query }}">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="col-md-3">
+                    <form method="get" class="d-flex">
+                        <select name="status" class="form-select me-2">
+                            <option value="">All Status</option>
+                            <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+                            <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Inactive</option>
+                            <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                        </select>
+                        <button type="submit" class="btn btn-secondary">Filter</button>
+                    </form>
+                </div>
+                <div class="col-md-3">
+                    <form method="get" class="d-flex">
+                        <select name="rating" class="form-select me-2">
+                            <option value="">All Ratings</option>
+                            <option value="5" {% if rating_filter == '5' %}selected{% endif %}>5 - Excellent</option>
+                            <option value="4" {% if rating_filter == '4' %}selected{% endif %}>4 - Very Good</option>
+                            <option value="3" {% if rating_filter == '3' %}selected{% endif %}>3 - Good</option>
+                            <option value="2" {% if rating_filter == '2' %}selected{% endif %}>2 - Fair</option>
+                            <option value="1" {% if rating_filter == '1' %}selected{% endif %}>1 - Poor</option>
+                        </select>
+                        <button type="submit" class="btn btn-secondary">Filter</button>
+                    </form>
+                </div>
+                <div class="col-md-2">
+                    <a href="{% url 'supplier_list' %}" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-refresh me-1"></i>Clear
+                    </a>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Suppliers Table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Contact Person</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Rating</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for supplier in suppliers %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'supplier_detail' supplier.id %}" 
+                                   class="text-decoration-none fw-bold">
+                                    {{ supplier.name }}
+                                </a>
+                            </td>
+                            <td>{{ supplier.contact_person }}</td>
+                            <td>
+                                <a href="mailto:{{ supplier.email }}" class="text-decoration-none">
+                                    {{ supplier.email }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="tel:{{ supplier.phone }}" class="text-decoration-none">
+                                    {{ supplier.phone }}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="badge 
+                                    {% if supplier.status == 'active' %}bg-success
+                                    {% elif supplier.status == 'inactive' %}bg-danger
+                                    {% elif supplier.status == 'pending' %}bg-warning text-dark
+                                    {% endif %}">
+                                    {{ supplier.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if supplier.rating %}
+                                    <div class="text-warning">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= supplier.rating %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted">Not Rated</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{% url 'supplier_detail' supplier.id %}" 
+                                       class="btn btn-sm btn-info" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'edit_supplier' supplier.id %}" 
+                                       class="btn btn-sm btn-primary" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'toggle_supplier_status' supplier.id %}" 
+                                       class="btn btn-sm 
+                                           {% if supplier.status == 'active' %}btn-warning{% else %}btn-success{% endif %}" 
+                                       title="{% if supplier.status == 'active' %}Deactivate{% else %}Activate{% endif %}">
+                                        <i class="fas {% if supplier.status == 'active' %}fa-pause{% else %}fa-play{% endif %}"></i>
+                                    </a>
+                                    <a href="{% url 'delete_supplier' supplier.id %}" 
+                                       class="btn btn-sm btn-danger" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-inbox fa-3x mb-3"></i>
+                                    <p>No suppliers found.</p>
+                                    <a href="{% url 'add_supplier' %}" class="btn btn-primary">
+                                        <i class="fas fa-plus-circle me-1"></i>Add Your First Supplier
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Summary -->
+            {% if suppliers %}
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <small class="text-muted">
+                        Showing {{ suppliers.count }} supplier{{ suppliers.count|pluralize }}
+                    </small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small class="text-muted">
+                        Active: {{ suppliers|dictsort:"status"|length }} | 
+                        Inactive: {{ suppliers|dictsort:"status"|length }}
+                    </small>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header" style="background-color: #2C3E50; color: white;">
+            <h4 class="mb-0"><i class="fas fa-list-ul me-2"></i>All Tasks</h4>
+        </div>
+        <div class="card-body">
+            <!-- Form for Search, Status Filter, and Add Task (Aligned Next to Each Other) -->
+            <div class="d-flex justify-content-between mb-3">
+                <!-- Search Bar -->
+                <form method="get" class="d-flex align-items-center" style="flex: 1;">
+                    <input type="text" name="search" class="form-control" placeholder="Search tasks by name" value="{{ request.GET.search }}" style="max-width: 400px;">
+                    <button type="submit" class="btn ms-2" style="background-color: #198754; color: white; border: none;">
+                        <i class="fas fa-search" style="font-size: 16px;"></i> <!-- Smaller Icon -->
+                    </button>
+                </form>
+
+                <!-- Status Filter -->
+                <form method="get" class="d-flex align-items-center ms-3" style="flex: 1;">
+                    <select name="status" class="form-select me-2" style="max-width: 200px;">
+                        <option value="">All Status</option>
+                        <option value="open" {% if request.GET.status == 'open' %}selected{% endif %}>Open</option>
+                        <option value="in_progress" {% if request.GET.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                        <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                    <button type="submit" class="btn" style="background-color: #198754; color: white; border: none;">Filter</button>
+                </form>
+
+                <!-- Add Task Button -->
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'add_task' %}" class="btn" style="background-color: #198754; color: white; border: none;">
+                        <i class="fas fa-plus-circle me-2"></i>Add Task
+                    </a>
+                </div>
+            </div>
+
+            <!-- Task Table -->
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Assigned To</th> <!-- Moved Assigned To here -->
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Description</th> <!-- Added Description -->
+                        <th>Date Created</th> <!-- Date Created moved here -->
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.assigned_to.username|default:"N/A" }}</td>
+                        <td>{{ task.status }}</td>
+                        <td>{{ task.priority }}</td>
+                        <td>{{ task.description|default:"No description available" }}</td>
+                        <td>{{ task.date_created|date:"Y-m-d H:i" }}</td>
+                        <td>
+                            <a href="{% url 'edit_task' task.id %}" class="btn btn-primary">Edit</a>
+                            <form method="post" action="{% url 'delete_task' task.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7">No tasks found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination (if needed) -->
+            <div class="d-flex justify-content-center">
+                {% if tasks.has_previous %}
+                    <a href="?page={{ tasks.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}" class="btn btn-secondary">Previous</a>
+                {% endif %}
+                {% if tasks.has_next %}
+                    <a href="?page={{ tasks.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}" class="btn btn-secondary">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

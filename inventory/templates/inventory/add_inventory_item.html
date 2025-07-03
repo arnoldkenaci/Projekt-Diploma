@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header" style="background-color: #2C3E50; color: white;">
+            <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add New Inventory Item</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <!-- Item Name -->
+                    <div class="col-md-12">
+                        <label class="form-label">Item Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+
+                    <!-- Quantity & Unit -->
+                    <div class="col-md-6">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" name="quantity" class="form-control" min="0" required>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Unit</label>
+                        <select name="unit" class="form-select" required>
+                            <option value="pcs">Pieces</option>
+                            <option value="kg">Kilograms</option>
+                            <option value="l">Liters</option>
+                            <option value="box">Boxes</option>
+                        </select>
+                    </div>
+
+                    <!-- Cost & Threshold -->
+                    <div class="col-md-6">
+                        <label class="form-label">Cost (ALL)</label>
+                        <input type="number" name="cost" class="form-control" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Low Stock Threshold</label>
+                        <input type="number" name="threshold" class="form-control" min="1" value="10" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-12">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-12">
+                        <button type="submit" class="btn w-100" style="background-color: #18BC9C; color: white;">
+                            <i class="fas fa-save me-2"></i>Save Item
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Required CDN Links -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}

@@ -1,0 +1,12 @@
+<!-- templates/ingredients/confirm_delete.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Are you sure you want to delete the ingredient: {{ ingredient.name }}?</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="{% url 'ingredient_list' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

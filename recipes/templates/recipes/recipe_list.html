@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Recipe List Title -->
+    <div class="card shadow-lg">
+        <div class="card-header" style="background-color: #2C3E50; color: white;">
+            <h4 class="mb-0"><i class="fas fa-utensils me-2"></i>Recipe List</h4>
+        </div>
+
+        <div class="card-body">
+            <!-- Search + Filter + Add Recipe -->
+            <div class="d-flex justify-content-between mb-3">
+                <!-- Search Bar -->
+                <form method="get" class="d-flex align-items-center" style="flex: 1;">
+                    <input type="text" name="search" class="form-control" placeholder="Search recipes" value="{{ request.GET.search }}" style="max-width: 400px;">
+                    <button type="submit" class="btn ms-2" style="background-color: #198754; color: white;">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+
+                <!-- Status Filter -->
+                <form method="get" class="d-flex align-items-center ms-3" style="flex: 1;">
+                    <select name="status" class="form-select me-2" style="max-width: 200px;">
+                        <option value="">All Status</option>
+                        <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="in_progress" {% if request.GET.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                        <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                    <button type="submit" class="btn" style="background-color: #198754; color: white;">Filter</button>
+                </form>
+
+                <!-- Add Recipe Button -->
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'add_recipe' %}" class="btn" style="background-color: #198754; color: white;">
+                        <i class="fas fa-plus-circle me-2"></i>Add Recipe
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recipe Table -->
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Course Type</th>
+                        <th>Prep Time</th>
+                        <th>Cook Time</th>
+                        <th>Portions</th>
+                        <th>Status</th>
+                        <th>Quick Actions</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recipe in recipes %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <a href="{% url 'recipe_detail' recipe.id %}" class="text-decoration-none">{{ recipe.name }}</a>
+                        </td>
+                        <td>{{ recipe.get_course_type_display }}</td>
+                        <td>{{ recipe.prep_time }}</td>
+                        <td>{{ recipe.cook_time }}</td>
+                        <td>{{ recipe.portions }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if recipe.status == 'pending' %}bg-warning text-dark
+                                {% elif recipe.status == 'in_progress' %}bg-info text-dark
+                                {% elif recipe.status == 'completed' %}bg-success
+                                {% endif %}">
+                                {{ recipe.status|title }}
+                            </span>
+                        </td>
+                        <td>
+                            <!-- Quick Actions -->
+                            <div class="d-flex">
+                                <a href="{% url 'change_recipe_status' recipe.id 'pending' %}" class="btn btn-sm btn-warning me-1" title="Mark as Pending">
+                                    <i class="fas fa-clock"></i>
+                                </a>
+                                <a href="{% url 'change_recipe_status' recipe.id 'in_progress' %}" class="btn btn-sm btn-info me-1" title="Mark as In Progress">
+                                    <i class="fas fa-spinner"></i>
+                                </a>
+                                <a href="{% url 'change_recipe_status' recipe.id 'completed' %}" class="btn btn-sm btn-success" title="Mark as Completed">
+                                    <i class="fas fa-check"></i>
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <!-- Edit Recipe -->
+                            <a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-sm btn-primary me-1" title="Edit Recipe">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <!-- Delete Recipe -->
+                            <form method="post" action="{% url 'delete_recipe' recipe.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" title="Delete Recipe">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="9" class="text-center">No recipes found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center">
+                {% if recipes.has_previous %}
+                    <a href="?page={{ recipes.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}" class="btn btn-secondary me-2">Previous</a>
+                {% endif %}
+                {% if recipes.has_next %}
+                    <a href="?page={{ recipes.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}" class="btn btn-secondary">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

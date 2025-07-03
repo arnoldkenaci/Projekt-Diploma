@@ -1,0 +1,256 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container py-5">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark">
+      <i class="fas fa-utensils me-2 text-primary"></i>{{ recipe.name }}
+    </h2>
+    <div class="d-flex gap-2">
+      <a
+        href="{% url 'add_ingredient_to_recipe' recipe.pk %}"
+        class="btn btn-success rounded-pill shadow-sm"
+      >
+        <i class="fas fa-plus me-1"></i> Add Ingredient
+      </a>
+      <a
+        href="{% url 'recipe_list' %}"
+        class="btn btn-outline-primary rounded-pill shadow-sm"
+      >
+        <i class="fas fa-arrow-left me-1"></i> Back to Recipes
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Card -->
+  <div class="card p-4 shadow-lg rounded-4 bg-white border-0">
+    <div class="row g-4 align-items-center">
+      <!-- Image -->
+      {% if recipe.image %}
+      <div class="col-md-5">
+        <img
+          src="{{ recipe.image.url }}"
+          alt="{{ recipe.name }}"
+          class="img-fluid rounded-4 shadow-sm border w-100"
+        />
+      </div>
+      {% endif %}
+
+      <!-- Details -->
+      <div class="col-md-7">
+        <div class="row g-3">
+          <!-- Detail Block -->
+          <div class="col-6 col-md-6">
+            <div
+              class="bg-light p-3 rounded-3 d-flex align-items-center gap-3 shadow-sm"
+            >
+              <i class="fas fa-layer-group fa-lg text-primary"></i>
+              <div>
+                <small class="text-muted">Course Type</small>
+                <h6 class="mb-0">{{ recipe.get_course_type_display }}</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-6">
+            <div
+              class="bg-light p-3 rounded-3 d-flex align-items-center gap-3 shadow-sm"
+            >
+              <i class="fas fa-info-circle fa-lg text-warning"></i>
+              <div>
+                <small class="text-muted">Status</small>
+                <h6 class="mb-0">
+                  {% if recipe.status == "pending" %}
+                  <span class="badge bg-warning text-dark">Pending</span>
+                  {% elif recipe.status == "in_progress" %}
+                  <span class="badge bg-info text-dark">In Progress</span>
+                  {% elif recipe.status == "completed" %}
+                  <span class="badge bg-success">Completed</span>
+                  {% endif %}
+                </h6>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-4">
+            <div
+              class="bg-light p-3 rounded-3 d-flex align-items-center gap-3 shadow-sm"
+            >
+              <i class="fas fa-stopwatch fa-lg text-danger"></i>
+              <div>
+                <small class="text-muted">Prep Time</small>
+                <h6 class="mb-0">{{ recipe.prep_time }} min</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <div
+              class="bg-light p-3 rounded-3 d-flex align-items-center gap-3 shadow-sm"
+            >
+              <i class="fas fa-fire fa-lg text-danger"></i>
+              <div>
+                <small class="text-muted">Cook Time</small>
+                <h6 class="mb-0">{{ recipe.cook_time }} min</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <div
+              class="bg-light p-3 rounded-3 d-flex align-items-center gap-3 shadow-sm"
+            >
+              <i class="fas fa-users fa-lg text-secondary"></i>
+              <div>
+                <small class="text-muted">Portions</small>
+                <h6 class="mb-0">{{ recipe.portions }}</h6>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-6">
+            <div
+              class="bg-light p-3 rounded-3 d-flex align-items-center gap-3 shadow-sm"
+            >
+              <i class="fas fa-euro-sign fa-lg text-success"></i>
+              <div>
+                <small class="text-muted">Total Cost</small>
+                <h6 class="mb-0">€{{ total_cost|floatformat:2 }}</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-6">
+            <div
+              class="bg-light p-3 rounded-3 d-flex align-items-center gap-3 shadow-sm"
+            >
+              <i class="fas fa-percentage fa-lg text-info"></i>
+              <div>
+                <small class="text-muted">Cost per Portion</small>
+                <h6 class="mb-0">€{{ cost_per_portion|floatformat:2 }}</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <hr class="my-5" />
+
+    <!-- Ingredients Section -->
+    <h4 class="fw-bold mb-3 text-primary">
+      <i class="fas fa-carrot me-2"></i>Ingredients ({{ ingredients.count }})
+    </h4>
+
+    {% if ingredients %}
+    <div class="table-responsive mb-4">
+      <table class="table table-hover border rounded-3 shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th><i class="fas fa-carrot me-1"></i>Ingredient</th>
+            <th><i class="fas fa-balance-scale me-1"></i>Quantity</th>
+            <th><i class="fas fa-euro-sign me-1"></i>Unit Cost</th>
+            <th><i class="fas fa-calculator me-1"></i>Total Cost</th>
+            <th><i class="fas fa-sticky-note me-1"></i>Notes</th>
+            <th><i class="fas fa-cogs me-1"></i>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for recipe_ingredient in ingredients %}
+          <tr>
+            <td>
+              <div class="d-flex align-items-center">
+                <span
+                  class="badge bg-{% if recipe_ingredient.ingredient.status == 'in_stock' %}success{% else %}danger{% endif %} me-2"
+                >
+                  <i class="fas fa-circle"></i>
+                </span>
+                {{ recipe_ingredient.ingredient.name }}
+              </div>
+            </td>
+            <td>
+              {{ recipe_ingredient.quantity }} {{ recipe_ingredient.unit }}
+            </td>
+            <td>€{{ recipe_ingredient.ingredient.price|floatformat:2 }}</td>
+            <td class="fw-bold text-success">
+              €{{ recipe_ingredient.get_cost|floatformat:2 }}
+            </td>
+            <td>
+              {% if recipe_ingredient.notes %}
+              <small class="text-muted">{{ recipe_ingredient.notes }}</small>
+              {% else %}
+              <span class="text-muted">-</span>
+              {% endif %}
+            </td>
+            <td>
+              <a
+                href="{% url 'remove_ingredient_from_recipe' recipe.pk recipe_ingredient.pk %}"
+                class="btn btn-sm btn-outline-danger"
+                onclick="return confirm('Remove {{ recipe_ingredient.ingredient.name }} from this recipe?')"
+              >
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info rounded-3 shadow-sm">
+      <i class="fas fa-info-circle me-2"></i>
+      No ingredients added to this recipe yet.
+      <a
+        href="{% url 'add_ingredient_to_recipe' recipe.pk %}"
+        class="alert-link"
+        >Add the first ingredient</a
+      >
+    </div>
+    {% endif %}
+
+    <!-- Nutritional Info -->
+    <h4 class="fw-bold mb-3 text-primary">
+      <i class="fas fa-apple-alt me-2"></i>Nutritional Information
+    </h4>
+    <div class="row text-center g-4 mb-4">
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm rounded-3 py-4">
+          <i class="fas fa-fire-alt fa-2x text-danger mb-2"></i>
+          <h6 class="text-muted">Calories</h6>
+          <h4 class="text-danger fw-bold">{{ recipe.calories|default:0 }}</h4>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm rounded-3 py-4">
+          <i class="fas fa-dumbbell fa-2x text-primary mb-2"></i>
+          <h6 class="text-muted">Proteins</h6>
+          <h4 class="text-primary fw-bold">{{ recipe.proteins|default:0 }}g</h4>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm rounded-3 py-4">
+          <i class="fas fa-bacon fa-2x text-warning mb-2"></i>
+          <h6 class="text-muted">Fats</h6>
+          <h4 class="text-warning fw-bold">{{ recipe.fats|default:0 }}g</h4>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card border-0 shadow-sm rounded-3 py-4">
+          <i class="fas fa-bread-slice fa-2x text-success mb-2"></i>
+          <h6 class="text-muted">Carbohydrates</h6>
+          <h4 class="text-success fw-bold">
+            {{ recipe.carbohydrates|default:0 }}g
+          </h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preparation Sheet -->
+    <h4 class="fw-bold mb-3">
+      <i class="fas fa-list-ul me-2 text-secondary"></i>Preparation Sheet
+    </h4>
+    <div
+      class="bg-light p-4 rounded-3 border shadow-sm mb-4"
+      style="white-space: pre-line"
+    >
+      {{ recipe.preparation_sheet|linebreaks }}
+    </div>
+  </div>
+</div>
+{% endblock %}

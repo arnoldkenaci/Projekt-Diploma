@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+*.log
+.mypy_cache/
+
+# Django
+media/
+staticfiles/
+
+# Environment variables
+.env
+env/
+.venv/
+venv/
+ENV/
+
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test/coverage
+htmlcov/
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+
+# Backup files
+*~
+*.bak
+*.tmp
+
+
+
+# Compiled files
+*.so
+
+
+# Migration backups
+*/migrations/__pycache__/
+*/migrations/*.pyc
+

@@ -1,0 +1,158 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <!-- Login Card -->
+      <div class="card shadow-lg border-0 rounded-4">
+        <div
+          class="card-header bg-primary text-white text-center rounded-top-4 py-4"
+        >
+          <h3 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>Login</h3>
+          <p class="mb-0 mt-2 opacity-75">Welcome back to Kitchen Management</p>
+        </div>
+
+        <div class="card-body p-4">
+          {% if messages %} {% for message in messages %}
+          <div
+            class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3"
+            role="alert"
+          >
+            <i
+              class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"
+            ></i>
+            {{ message }}
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+            ></button>
+          </div>
+          {% endfor %} {% endif %}
+
+          <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="username" class="form-label fw-bold">
+                <i class="fas fa-user me-1 text-primary"></i>Username
+              </label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="username"
+                name="username"
+                required
+              />
+              <div class="invalid-feedback">Please enter your username.</div>
+            </div>
+
+            <div class="mb-4">
+              <label for="password" class="form-label fw-bold">
+                <i class="fas fa-lock me-1 text-primary"></i>Password
+              </label>
+              <input
+                type="password"
+                class="form-control form-control-lg"
+                id="password"
+                name="password"
+                required
+              />
+              <div class="invalid-feedback">Please enter your password.</div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm mb-3"
+            >
+              <i class="fas fa-sign-in-alt me-2"></i>Login
+            </button>
+          </form>
+
+          <hr class="my-4" />
+
+          <div class="text-center">
+            <p class="text-muted mb-2">Don't have an account?</p>
+            <a
+              href="{% url 'register' %}"
+              class="btn btn-outline-success rounded-pill"
+            >
+              <i class="fas fa-user-plus me-1"></i>Create Account
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Card -->
+      <div class="card mt-4 shadow-sm border-0 rounded-4">
+        <div class="card-body text-center">
+          <h6 class="text-primary mb-3">
+            <i class="fas fa-star me-1"></i>Kitchen Management Features
+          </h6>
+          <div class="row g-2 text-muted">
+            <div class="col-6">
+              <small
+                ><i class="fas fa-utensils me-1"></i>Recipe Management</small
+              >
+            </div>
+            <div class="col-6">
+              <small
+                ><i class="fas fa-carrot me-1"></i>Ingredient Tracking</small
+              >
+            </div>
+            <div class="col-6">
+              <small><i class="fas fa-boxes me-1"></i>Inventory Control</small>
+            </div>
+            <div class="col-6">
+              <small><i class="fas fa-tasks me-1"></i>Task Management</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+
+  .btn-primary {
+    background: linear-gradient(45deg, #0d6efd, #0b5ed7);
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(45deg, #0b5ed7, #0a58ca);
+    transform: translateY(-1px);
+  }
+</style>
+
+<script>
+  // Form validation
+  (function () {
+    "use strict";
+    window.addEventListener(
+      "load",
+      function () {
+        var forms = document.getElementsByClassName("needs-validation");
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      },
+      false
+    );
+  })();
+</script>
+{% endblock %}

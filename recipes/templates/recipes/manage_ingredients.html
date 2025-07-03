@@ -1,0 +1,255 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container py-5">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark">
+      <i class="fas fa-cogs me-2 text-primary"></i>Manage Recipe Ingredients
+    </h2>
+    <div class="d-flex gap-2">
+      <a
+        href="{% url 'add_ingredient_to_recipe' recipe.pk %}"
+        class="btn btn-success rounded-pill shadow-sm"
+      >
+        <i class="fas fa-plus me-1"></i> Add New
+      </a>
+      <a
+        href="{% url 'recipe_detail' recipe.pk %}"
+        class="btn btn-outline-primary rounded-pill shadow-sm"
+      >
+        <i class="fas fa-arrow-left me-1"></i> Back to Recipe
+      </a>
+    </div>
+  </div>
+
+  <!-- Recipe Info Card -->
+  <div class="card mb-4 shadow-sm border-0 rounded-4">
+    <div class="card-body">
+      <h5 class="card-title text-primary">
+        <i class="fas fa-utensils me-2"></i>{{ recipe.name }}
+      </h5>
+      <p class="card-text text-muted mb-0">
+        Managing ingredients for {{ recipe.get_course_type_display|lower }}
+        recipe
+      </p>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-header bg-primary text-white rounded-top-4">
+      <h4 class="mb-0"><i class="fas fa-list me-2"></i>Ingredients List</h4>
+    </div>
+    <div class="card-body p-4">
+      <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %} {{ formset.management_form }}
+
+        <div class="table-responsive">
+          <table class="table table-hover border rounded-3">
+            <thead class="table-light">
+              <tr>
+                <th><i class="fas fa-carrot me-1"></i>Ingredient</th>
+                <th><i class="fas fa-balance-scale me-1"></i>Quantity</th>
+                <th><i class="fas fa-ruler me-1"></i>Unit</th>
+                <th><i class="fas fa-sticky-note me-1"></i>Notes</th>
+                <th><i class="fas fa-trash me-1"></i>Remove</th>
+              </tr>
+            </thead>
+            <tbody id="ingredients-tbody">
+              {% for form in formset %}
+              <tr class="ingredient-row">
+                <td>
+                  {{ form.id }} {{ form.ingredient }} {% if
+                  form.ingredient.errors %}
+                  <div class="invalid-feedback d-block">
+                    {% for error in form.ingredient.errors %} {{ error }} {%
+                    endfor %}
+                  </div>
+                  {% endif %}
+                </td>
+                <td>
+                  {{ form.quantity }} {% if form.quantity.errors %}
+                  <div class="invalid-feedback d-block">
+                    {% for error in form.quantity.errors %} {{ error }} {%
+                    endfor %}
+                  </div>
+                  {% endif %}
+                </td>
+                <td>
+                  {{ form.unit }} {% if form.unit.errors %}
+                  <div class="invalid-feedback d-block">
+                    {% for error in form.unit.errors %} {{ error }} {% endfor %}
+                  </div>
+                  {% endif %}
+                </td>
+                <td>
+                  {{ form.notes }} {% if form.notes.errors %}
+                  <div class="invalid-feedback d-block">
+                    {% for error in form.notes.errors %} {{ error }} {% endfor
+                    %}
+                  </div>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="form-check">
+                    {{ form.DELETE }}
+                    <label
+                      class="form-check-label"
+                      for="{{ form.DELETE.id_for_label }}"
+                    >
+                      <i class="fas fa-trash text-danger"></i>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Add New Row Button -->
+        <div class="text-center mt-3">
+          <button
+            type="button"
+            class="btn btn-outline-success rounded-pill"
+            id="add-ingredient-row"
+          >
+            <i class="fas fa-plus me-1"></i> Add Another Ingredient
+          </button>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="d-flex justify-content-end gap-3 mt-4 pt-4 border-top">
+          <a
+            href="{% url 'recipe_detail' recipe.pk %}"
+            class="btn btn-outline-secondary rounded-pill"
+          >
+            <i class="fas fa-times me-1"></i> Cancel
+          </a>
+          <button type="submit" class="btn btn-primary rounded-pill shadow-sm">
+            <i class="fas fa-save me-1"></i> Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Instructions Card -->
+  <div class="card mt-4 shadow-sm border-0 rounded-4">
+    <div class="card-header bg-light rounded-top-4">
+      <h5 class="mb-0 text-secondary">
+        <i class="fas fa-info-circle me-2"></i>Instructions
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="d-flex align-items-start">
+            <i class="fas fa-edit text-primary me-2 mt-1"></i>
+            <div>
+              <h6 class="fw-bold">Edit Ingredients</h6>
+              <small class="text-muted"
+                >Modify quantities, units, or notes for existing
+                ingredients</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex align-items-start">
+            <i class="fas fa-trash text-danger me-2 mt-1"></i>
+            <div>
+              <h6 class="fw-bold">Remove Ingredients</h6>
+              <small class="text-muted"
+                >Check the remove box to delete ingredients from the
+                recipe</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex align-items-start">
+            <i class="fas fa-plus text-success me-2 mt-1"></i>
+            <div>
+              <h6 class="fw-bold">Add New</h6>
+              <small class="text-muted"
+                >Use the "Add Another Ingredient" button to add more
+                ingredients</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex align-items-start">
+            <i class="fas fa-save text-info me-2 mt-1"></i>
+            <div>
+              <h6 class="fw-bold">Save Changes</h6>
+              <small class="text-muted"
+                >All changes will be applied when you save the form</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+
+  .ingredient-row .form-control,
+  .ingredient-row .form-select {
+    font-size: 0.9rem;
+  }
+
+  .form-check-input:checked {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const addButton = document.getElementById("add-ingredient-row");
+    const tbody = document.getElementById("ingredients-tbody");
+    const totalFormsInput = document.getElementById("id_form-TOTAL_FORMS");
+
+    addButton.addEventListener("click", function () {
+      const currentForms = parseInt(totalFormsInput.value);
+      const newFormNum = currentForms;
+
+      // Clone the last row
+      const lastRow = tbody.querySelector(".ingredient-row:last-child");
+      const newRow = lastRow.cloneNode(true);
+
+      // Update form indices
+      newRow.innerHTML = newRow.innerHTML.replace(
+        /form-(\d+)/g,
+        "form-" + newFormNum
+      );
+
+      // Clear the values
+      newRow
+        .querySelectorAll("input, select, textarea")
+        .forEach(function (input) {
+          if (input.type !== "hidden" && input.name !== "csrfmiddlewaretoken") {
+            input.value = "";
+          }
+        });
+
+      // Uncheck delete checkbox
+      const deleteCheckbox = newRow.querySelector('input[type="checkbox"]');
+      if (deleteCheckbox) {
+        deleteCheckbox.checked = false;
+      }
+
+      tbody.appendChild(newRow);
+      totalFormsInput.value = newFormNum + 1;
+    });
+  });
+</script>
+{% endblock %}

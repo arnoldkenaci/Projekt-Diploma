@@ -1,0 +1,268 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- Registration Card -->
+      <div class="card shadow-lg border-0 rounded-4">
+        <div
+          class="card-header bg-success text-white text-center rounded-top-4 py-4"
+        >
+          <h3 class="mb-0">
+            <i class="fas fa-user-plus me-2"></i>Create Account
+          </h3>
+          <p class="mb-0 mt-2 opacity-75">Join the Kitchen Management System</p>
+        </div>
+
+        <div class="card-body p-4">
+          {% if messages %} {% for message in messages %}
+          <div
+            class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3"
+            role="alert"
+          >
+            <i
+              class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"
+            ></i>
+            {{ message }}
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+            ></button>
+          </div>
+          {% endfor %} {% endif %}
+
+          <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="row g-3">
+              <!-- Username -->
+              <div class="col-md-6">
+                <label
+                  for="{{ form.username.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  <i class="fas fa-user me-1 text-primary"></i>Username *
+                </label>
+                {{ form.username }} {% if form.username.errors %}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.username.errors %} {{ error }} {% endfor
+                  %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-6">
+                <label
+                  for="{{ form.email.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  <i class="fas fa-envelope me-1 text-primary"></i>Email *
+                </label>
+                {{ form.email }} {% if form.email.errors %}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.email.errors %} {{ error }} {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- First Name -->
+              <div class="col-md-6">
+                <label
+                  for="{{ form.first_name.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  <i class="fas fa-id-card me-1 text-primary"></i>First Name *
+                </label>
+                {{ form.first_name }} {% if form.first_name.errors %}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.first_name.errors %} {{ error }} {%
+                  endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Last Name -->
+              <div class="col-md-6">
+                <label
+                  for="{{ form.last_name.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  <i class="fas fa-id-card me-1 text-primary"></i>Last Name *
+                </label>
+                {{ form.last_name }} {% if form.last_name.errors %}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.last_name.errors %} {{ error }} {% endfor
+                  %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Role -->
+              <div class="col-12">
+                <label
+                  for="{{ form.role.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  <i class="fas fa-user-tag me-1 text-primary"></i>Role *
+                </label>
+                {{ form.role }} {% if form.role.errors %}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.role.errors %} {{ error }} {% endfor %}
+                </div>
+                {% endif %}
+                <div class="form-text">
+                  <i class="fas fa-info-circle me-1"></i>
+                  Choose your role in the kitchen management system
+                </div>
+              </div>
+
+              <!-- Password 1 -->
+              <div class="col-md-6">
+                <label
+                  for="{{ form.password1.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  <i class="fas fa-lock me-1 text-primary"></i>Password *
+                </label>
+                {{ form.password1 }} {% if form.password1.errors %}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.password1.errors %} {{ error }} {% endfor
+                  %}
+                </div>
+                {% endif %} {% if form.password1.help_text %}
+                <div class="form-text">
+                  <small>{{ form.password1.help_text }}</small>
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Password 2 -->
+              <div class="col-md-6">
+                <label
+                  for="{{ form.password2.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  <i class="fas fa-lock me-1 text-primary"></i>Confirm Password
+                  *
+                </label>
+                {{ form.password2 }} {% if form.password2.errors %}
+                <div class="invalid-feedback d-block">
+                  {% for error in form.password2.errors %} {{ error }} {% endfor
+                  %}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <button
+              type="submit"
+              class="btn btn-success btn-lg w-100 rounded-pill shadow-sm mb-3"
+            >
+              <i class="fas fa-user-plus me-2"></i>Create Account
+            </button>
+          </form>
+
+          <div class="text-center">
+            <p class="text-muted mb-0">Already have an account?</p>
+            <a
+              href="{% url 'login' %}"
+              class="btn btn-outline-primary rounded-pill mt-2"
+            >
+              <i class="fas fa-sign-in-alt me-1"></i>Login
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Role Information Card -->
+      <div class="card mt-4 shadow-sm border-0 rounded-4">
+        <div class="card-header bg-light rounded-top-4">
+          <h6 class="mb-0 text-secondary">
+            <i class="fas fa-info-circle me-2"></i>Role Information
+          </h6>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="text-center p-3 bg-light rounded-3">
+                <i class="fas fa-utensils fa-2x text-warning mb-2"></i>
+                <h6 class="fw-bold">Chef</h6>
+                <small class="text-muted"
+                  >Full access to recipes, ingredients, and kitchen
+                  management</small
+                >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-center p-3 bg-light rounded-3">
+                <i class="fas fa-user-tie fa-2x text-primary mb-2"></i>
+                <h6 class="fw-bold">Manager</h6>
+                <small class="text-muted"
+                  >Access to inventory, suppliers, and task management</small
+                >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-center p-3 bg-light rounded-3">
+                <i class="fas fa-user fa-2x text-success mb-2"></i>
+                <h6 class="fw-bold">Staff</h6>
+                <small class="text-muted"
+                  >Basic access to view recipes and tasks</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+  }
+
+  .btn-success {
+    background: linear-gradient(45deg, #198754, #157347);
+    border: none;
+  }
+
+  .btn-success:hover {
+    background: linear-gradient(45deg, #157347, #146c43);
+    transform: translateY(-1px);
+  }
+</style>
+
+<script>
+  // Form validation
+  (function () {
+    "use strict";
+    window.addEventListener(
+      "load",
+      function () {
+        var forms = document.getElementsByClassName("needs-validation");
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      },
+      false
+    );
+  })();
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Are you sure you want to delete this ingredient?</h2>
+
+<div>
+    <p>Name: {{ ingredient.name }}</p>
+    <p>Quantity: {{ ingredient.quantity }}</p>
+    <p>Price: {{ ingredient.price }} ALL</p>
+    <p>Status: {{ ingredient.get_status_display }}</p>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" style="padding: 6px 12px; background-color: #dc3545; color: white; border: none; cursor: pointer;">Yes, Delete</button>
+</form>
+
+<a href="{% url 'ingredient_list' %}" style="margin-top: 20px; display: inline-block;">Cancel</a>
+
+{% endblock %}

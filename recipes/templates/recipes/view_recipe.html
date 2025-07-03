@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Recipe Details{% endblock %}
+
+{% block content %}
+    <h2>{{ recipe.name }}</h2>
+    <img src="{{ recipe.image_url }}" alt="{{ recipe.name }}" class="img-fluid mb-3">
+    
+    <h5>Course Type: {{ recipe.course_type }}</h5>
+    <p><strong>Preparation Time:</strong> {{ recipe.prep_time }}</p>
+    <p><strong>Cook Time:</strong> {{ recipe.cook_time }}</p>
+    <p><strong>Portions:</strong> {{ recipe.portions }}</p

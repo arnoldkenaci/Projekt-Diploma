@@ -1,0 +1,12 @@
+<!-- templates/ingredients/ingredient_form.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Ingredient</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}Add{% endif %} Ingredient</button>
+</form>
+{% endblock %}

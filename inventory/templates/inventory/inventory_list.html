@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Inventory Title -->
+    <div class="card shadow-lg">
+        <div class="card-header" style="background-color: #2C3E50; color: white;">
+            <h4 class="mb-0"><i class="fas fa-boxes me-2"></i>Inventory List</h4>
+        </div>
+
+        <div class="card-body">
+            <!-- Form for Search, Status Filter, and Add Item (Aligned Next to Each Other) -->
+            <div class="d-flex justify-content-between mb-3">
+                <!-- Search Bar -->
+                <form method="get" class="d-flex align-items-center" style="flex: 1;">
+                    <input type="text" name="search" class="form-control" placeholder="Search items" value="{{ request.GET.search }}" style="max-width: 400px;">
+                    <button type="submit" class="btn ms-2" style="background-color: #198754; color: white; border: none;">
+                        <i class="fas fa-search" style="font-size: 16px;"></i> <!-- Smaller Icon -->
+                    </button>
+                </form>
+
+                <!-- Status Filter -->
+                <form method="get" class="d-flex align-items-center ms-3" style="flex: 1;">
+                    <select name="status" class="form-select me-2" style="max-width: 200px;">
+                        <option value="">All Status</option>
+                        <option value="in_stock" {% if request.GET.status == 'in_stock' %}selected{% endif %}>In Stock</option>
+                        <option value="low_stock" {% if request.GET.status == 'low_stock' %}selected{% endif %}>Low Stock</option>
+                        <option value="out_of_stock" {% if request.GET.status == 'out_of_stock' %}selected{% endif %}>Out of Stock</option>
+                    </select>
+                    <button type="submit" class="btn" style="background-color: #198754; color: white; border: none;">Filter</button>
+                </form>
+
+                <!-- Add Item Button -->
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'add_item' %}" class="btn" style="background-color: #198754; color: white; border: none;">
+                        <i class="fas fa-plus-circle me-2"></i>Add Item
+                    </a>
+                </div>
+            </div>
+
+            <!-- Inventory Table -->
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Cost</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.get_unit_display }}</td>
+                        <td>{{ item.cost }} ALL</td>
+                        <td>
+                            <span class="badge 
+                                {% if item.status == 'in_stock' %}bg-success
+                                {% elif item.status == 'low_stock' %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {{ item.status|title }}
+                            </span>
+                        </td>
+                        <td>{{ item.description }}</td>
+                        <td>
+                            <a href="{% url 'edit_item' item.id %}" class="btn btn-primary">Edit</a>
+                            <form method="post" action="{% url 'delete_item' item.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="8">No items found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination (if needed) -->
+            <div class="d-flex justify-content-center">
+                {% if items.has_previous %}
+                    <a href="?page={{ items.previous_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}" class="btn btn-secondary">Previous</a>
+                {% endif %}
+                {% if items.has_next %}
+                    <a href="?page={{ items.next_page_number }}&search={{ request.GET.search }}&status={{ request.GET.status }}" class="btn btn-secondary">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

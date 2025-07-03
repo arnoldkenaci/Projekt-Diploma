@@ -1,0 +1,234 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-lg-10 mx-auto">
+      <div class="card shadow-lg">
+        <div
+          class="card-header"
+          style="background-color: #2c3e50; color: white"
+        >
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+              <i class="fas fa-truck me-2"></i>Supplier Details
+            </h4>
+            <div>
+              <a
+                href="{% url 'edit_supplier' supplier.id %}"
+                class="btn btn-outline-light btn-sm me-2"
+              >
+                <i class="fas fa-edit me-1"></i>Edit
+              </a>
+              <a
+                href="{% url 'supplier_list' %}"
+                class="btn btn-outline-light btn-sm"
+              >
+                <i class="fas fa-arrow-left me-1"></i>Back to List
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <!-- Supplier Header -->
+          <div class="row mb-4">
+            <div class="col-md-8">
+              <h2 class="text-primary mb-2">{{ supplier.name }}</h2>
+              <div class="d-flex align-items-center mb-2">
+                <span
+                  class="badge {% if supplier.status == 'active' %}bg-success {% elif supplier.status == 'inactive' %}bg-danger {% elif supplier.status == 'pending' %}bg-warning text-dark {% endif %} me-3"
+                >
+                  {{ supplier.get_status_display }}
+                </span>
+                {% if supplier.rating %}
+                <div class="text-warning">
+                  {% for i in "12345" %} {% if forloop.counter <=
+                  supplier.rating %}
+                  <i class="fas fa-star"></i>
+                  {% else %}
+                  <i class="far fa-star"></i>
+                  {% endif %} {% endfor %}
+                  <span class="text-muted ms-1"
+                    >({{ supplier.get_rating_display }})</span
+                  >
+                </div>
+                {% else %}
+                <span class="text-muted">Not Rated</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="col-md-4 text-end">
+              <div class="text-muted small">
+                <div>Created: {{ supplier.date_created|date:"M d, Y" }}</div>
+                <div>Updated: {{ supplier.date_updated|date:"M d, Y" }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h5 class="border-bottom pb-2 mb-3">
+                <i class="fas fa-address-card me-2"></i>Contact Information
+              </h5>
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Contact Person:</strong><br />
+              <span class="text-muted">{{ supplier.contact_person }}</span>
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Email:</strong><br />
+              <a
+                href="mailto:{{ supplier.email }}"
+                class="text-decoration-none"
+              >
+                {{ supplier.email }}
+              </a>
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Phone:</strong><br />
+              <a href="tel:{{ supplier.phone }}" class="text-decoration-none">
+                {{ supplier.phone }}
+              </a>
+            </div>
+            {% if supplier.website %}
+            <div class="col-md-6 mb-3">
+              <strong>Website:</strong><br />
+              <a
+                href="{{ supplier.website }}"
+                target="_blank"
+                class="text-decoration-none"
+              >
+                {{ supplier.website }}
+              </a>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Address Information -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h5 class="border-bottom pb-2 mb-3">
+                <i class="fas fa-map-marker-alt me-2"></i>Address Information
+              </h5>
+            </div>
+            <div class="col-12 mb-3">
+              <strong>Full Address:</strong><br />
+              <span class="text-muted">{{ supplier.full_address }}</span>
+            </div>
+          </div>
+
+          <!-- Business Information -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h5 class="border-bottom pb-2 mb-3">
+                <i class="fas fa-building me-2"></i>Business Information
+              </h5>
+            </div>
+            {% if supplier.tax_id %}
+            <div class="col-md-6 mb-3">
+              <strong>Tax ID:</strong><br />
+              <span class="text-muted">{{ supplier.tax_id }}</span>
+            </div>
+            {% endif %}
+            <div class="col-md-6 mb-3">
+              <strong>Status:</strong><br />
+              <span
+                class="badge {% if supplier.status == 'active' %}bg-success {% elif supplier.status == 'inactive' %}bg-danger {% elif supplier.status == 'pending' %}bg-warning text-dark {% endif %}"
+              >
+                {{ supplier.get_status_display }}
+              </span>
+            </div>
+            {% if supplier.rating %}
+            <div class="col-md-6 mb-3">
+              <strong>Rating:</strong><br />
+              <div class="text-warning">
+                {% for i in "12345" %} {% if forloop.counter <= supplier.rating
+                %}
+                <i class="fas fa-star"></i>
+                {% else %}
+                <i class="far fa-star"></i>
+                {% endif %} {% endfor %}
+                <span class="text-muted ms-1"
+                  >({{ supplier.get_rating_display }})</span
+                >
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Financial Information -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h5 class="border-bottom pb-2 mb-3">
+                <i class="fas fa-dollar-sign me-2"></i>Financial Information
+              </h5>
+            </div>
+            {% if supplier.payment_terms %}
+            <div class="col-md-6 mb-3">
+              <strong>Payment Terms:</strong><br />
+              <span class="text-muted">{{ supplier.payment_terms }}</span>
+            </div>
+            {% endif %} {% if supplier.credit_limit %}
+            <div class="col-md-6 mb-3">
+              <strong>Credit Limit:</strong><br />
+              <span class="text-muted">${{ supplier.credit_limit }}</span>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Additional Information -->
+          {% if supplier.notes %}
+          <div class="row mb-4">
+            <div class="col-12">
+              <h5 class="border-bottom pb-2 mb-3">
+                <i class="fas fa-sticky-note me-2"></i>Additional Information
+              </h5>
+              <div class="bg-light p-3 rounded">
+                {{ supplier.notes|linebreaks }}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Action Buttons -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <a
+                    href="{% url 'toggle_supplier_status' supplier.id %}"
+                    class="btn {% if supplier.status == 'active' %}btn-warning{% else %}btn-success{% endif %} me-2"
+                  >
+                    <i
+                      class="fas {% if supplier.status == 'active' %}fa-pause{% else %}fa-play{% endif %} me-1"
+                    ></i>
+                    {% if supplier.status == 'active' %}Deactivate{% else
+                    %}Activate{% endif %}
+                  </a>
+                  <a
+                    href="{% url 'delete_supplier' supplier.id %}"
+                    class="btn btn-danger"
+                  >
+                    <i class="fas fa-trash me-1"></i>Delete
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="{% url 'edit_supplier' supplier.id %}"
+                    class="btn btn-primary me-2"
+                  >
+                    <i class="fas fa-edit me-1"></i>Edit Supplier
+                  </a>
+                  <a href="{% url 'supplier_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-list me-1"></i>Back to List
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

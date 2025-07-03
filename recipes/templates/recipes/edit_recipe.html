@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Edit Recipe Card -->
+    <div class="card shadow-lg">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0"><i class="fas fa-edit me-2"></i>Edit Recipe</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Basic Info -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.course_type.label_tag }}
+                        {{ form.course_type }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.prep_time.label_tag }}
+                        {{ form.prep_time }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.cook_time.label_tag }}
+                        {{ form.cook_time }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.portions.label_tag }}
+                        {{ form.portions }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.status.label_tag }}
+                        {{ form.status }}
+                    </div>
+                </div>
+
+                <!-- Image -->
+                <div class="mb-3">
+                    {{ form.image.label_tag }}
+                    {{ form.image }}
+                    {% if recipe.image %}
+                        <div class="mt-2">
+                            <img src="{{ recipe.image.url }}" alt="Recipe Image" style="max-width: 200px;">
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Cost -->
+                <div class="mb-3">
+                    {{ form.cost.label_tag }}
+                    {{ form.cost }}
+                </div>
+
+                <!-- Nutritional Info -->
+                <h5 class="mt-4">Nutritional Information (per portion)</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">{{ form.calories.label_tag }}{{ form.calories }}</div>
+                    <div class="col-md-4 mb-3">{{ form.proteins.label_tag }}{{ form.proteins }}</div>
+                    <div class="col-md-4 mb-3">{{ form.fats.label_tag }}{{ form.fats }}</div>
+                    <div class="col-md-4 mb-3">{{ form.carbohydrates.label_tag }}{{ form.carbohydrates }}</div>
+                    <div class="col-md-4 mb-3">{{ form.sugar.label_tag }}{{ form.sugar }}</div>
+                    <div class="col-md-4 mb-3">{{ form.fiber.label_tag }}{{ form.fiber }}</div>
+                    <div class="col-md-4 mb-3">{{ form.sodium.label_tag }}{{ form.sodium }}</div>
+                </div>
+
+                <!-- Preparation Sheet -->
+                <div class="mb-3">
+                    {{ form.preparation_sheet.label_tag }}
+                    {{ form.preparation_sheet }}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-2"></i>Save Recipe
+                    </button>
+                    <a href="{% url 'recipe_list' %}" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

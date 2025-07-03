@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header" style="background-color: #2C3E50; color: white;">
+            <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>{% if ingredient %}Edit{% else %}Add{% endif %} Ingredient</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <!-- Ingredient Name -->
+                    <div class="col-md-12">
+                        <label class="form-label">Ingredient Name</label>
+                        <input type="text" name="name" class="form-control" required value="{{ form.name.value|default_if_none:'' }}">
+                    </div>
+
+                    <!-- Quantity & Unit -->
+                    <div class="col-md-6">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" name="quantity" class="form-control" min="0" required value="{{ form.quantity.value|default_if_none:'' }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Unit</label>
+                        <select name="unit" class="form-select" required>
+                            <option value="pcs" {% if form.unit.value == "pcs" %}selected{% endif %}>Pieces</option>
+                            <option value="kg" {% if form.unit.value == "kg" %}selected{% endif %}>Kilograms</option>
+                            <option value="l" {% if form.unit.value == "l" %}selected{% endif %}>Liters</option>
+                            <option value="box" {% if form.unit.value == "box" %}selected{% endif %}>Boxes</option>
+                        </select>
+                    </div>
+
+                    <!-- Price & Status -->
+                    <div class="col-md-6">
+                        <label class="form-label">Price (ALL)</label>
+                        <input type="number" name="price" class="form-control" step="0.01" min="0" required value="{{ form.price.value|default_if_none:'' }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select" required>
+                            <option value="in_stock" {% if form.status.value == "in_stock" %}selected{% endif %}>In Stock</option>
+                            <option value="out_of_stock" {% if form.status.value == "out_of_stock" %}selected{% endif %}>Out of Stock</option>
+                        </select>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-12">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3">{{ form.description.value|default_if_none:'' }}</textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-12">
+                        <button type="submit" class="btn w-100" style="background-color: #18BC9C; color: white;">
+                            <i class="fas fa-save me-2"></i>{% if ingredient %}Save Changes{% else %}Add Ingredient{% endif %}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Required CDN Links -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
