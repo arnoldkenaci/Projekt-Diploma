@@ -1,8 +1,16 @@
 from django import forms
+from django.contrib.auth.models import User
+
+
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
 
+# OTP Login Form
+class OTPLoginForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    otp = forms.CharField(max_length=12)# OTP Login Form
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)

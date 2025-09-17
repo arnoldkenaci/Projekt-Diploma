@@ -1,3 +1,13 @@
+from .forms import UserRegistrationForm, ProfileUpdateForm, OTPLoginForm
+from .models import Profile, OneTimePassword
+# OTP login view
+from django.contrib.auth import login as auth_login
+from django.utils import timezone
+import uuid
+
+from django.contrib.auth.decorators import login_required
+
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -6,7 +16,36 @@ from django.contrib.auth.models import User
 from .forms import UserRegistrationForm, ProfileUpdateForm
 from .models import Profile
 
+@login_required
+def generate_otp(request):
+    # Generate a new OTP for the logged-in user
+    code = str(uuid.uuid4())[:8]
+    otp = OneTimePassword.objects.create(user=request.user, code=code)
+    return render(request, "accounts/show_otp.html", {"otp": otp})
 
+def otp_login(request):
+    message = None
+    if request.method == "POST":
+        form = OTPLoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            otp_code = form.cleaned_data["otp"]
+            try:
+                user = User.objects.get(username=username)
+                otp = OneTimePassword.objects.get(user=user, code=otp_code, used=False)
+                # Mark OTP as used
+                otp.mark_used()
+                auth_login(request, user)
+                return redirect("dashboard")
+            except (User.DoesNotExist, OneTimePassword.DoesNotExist):
+                message = "Invalid username or OTP."
+        else:
+            message = "Please fill in all fields."
+    else:
+        form = OTPLoginForm()
+    return render(request, "accounts/otp_login.html", {"form": form, "message": message})
+
+# View to generate OTP for a user (for demo/testing)
 def register(request):
     """User registration view"""
     if request.method == "POST":

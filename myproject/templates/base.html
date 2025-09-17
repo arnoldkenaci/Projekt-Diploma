@@ -188,69 +188,69 @@
 <body>
   <!-- Sidebar -->
   {% if user.is_authenticated %}
-  <div class="sidebar">
-    <h2>My Kitchen App</h2>
+    <div class="sidebar">
+      <h2>My Kitchen App</h2>
 
-    <!-- Dashboard -->
-    <a href="{% url 'dashboard' %}" class="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <!-- Dashboard -->
+      <a href="{% url 'dashboard' %}" class="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
 
-    <!-- Recipes Dropdown -->
-    <div class="dropdown">
-      <a href="javascript:void(0)" onclick="toggleDropdown('dropdown-recipes')"><i class="fas fa-utensils"></i>
-        Recipes</a>
-      <ul id="dropdown-recipes" class="dropdown-content">
-        <li>
-          <a href="{% url 'recipe_list' %}" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-list"></i> All Recipes
-          </a>
-        </li>
-        <li>
-          <a href="{% url 'add_recipe' %}"><i class="fas fa-plus-circle"></i> Add Recipe</a>
-        </li>
-      </ul>
+      <!-- Recipes Dropdown -->
+      <div class="dropdown">
+        <a href="javascript:void(0)" onclick="toggleDropdown('dropdown-recipes')"><i class="fas fa-utensils"></i>
+          Recipes</a>
+        <ul id="dropdown-recipes" class="dropdown-content">
+          <li>
+            <a href="{% url 'recipe_list' %}" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-list"></i> All Recipes
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'add_recipe' %}"><i class="fas fa-plus-circle"></i> Add Recipe</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Ingredients Dropdown -->
+      <div class="dropdown">
+        <a href="javascript:void(0)" onclick="toggleDropdown('dropdown-ingredients')"><i class="fas fa-carrot"></i>
+          Ingredients</a>
+        <ul id="dropdown-ingredients" class="dropdown-content">
+          <li>
+            <a href="{% url 'ingredient_list' %}"><i class="fas fa-list"></i> View All Ingredients</a>
+          </li>
+          <li>
+            <a href="{% url 'add_ingredient' %}"><i class="fas fa-plus-circle"></i> Add New Ingredient</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tasks Dropdown -->
+      <div class="dropdown">
+        <a href="javascript:void(0)" onclick="toggleDropdown('dropdown-tasks')"><i class="fas fa-tasks"></i> Tasks</a>
+        <ul id="dropdown-tasks" class="dropdown-content">
+          <li>
+            <a href="{% url 'task_list' %}"><i class="fas fa-calendar-day"></i> View Daily Tasks</a>
+          </li>
+          <li>
+            <a href="{% url 'add_task' %}"><i class="fas fa-plus-circle"></i> Add New Task</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Inventory (No dropdown) -->
+      <a href="{% url 'inventory_list' %}"><i class="fas fa-warehouse"></i> Inventory</a>
+
+      <!-- Suppliers (No dropdown) -->
+      <a href="{% url 'supplier_list' %}">
+        <i class="fas fa-truck"></i> Suppliers
+      </a>
+
+      <!-- Auth Buttons -->
+      <a href="{% url 'profile' %}"><i class="fas fa-user-circle"></i> Profili</a>
+      <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Dil (Logout)</a>
     </div>
-
-    <!-- Ingredients Dropdown -->
-    <div class="dropdown">
-      <a href="javascript:void(0)" onclick="toggleDropdown('dropdown-ingredients')"><i class="fas fa-carrot"></i>
-        Ingredients</a>
-      <ul id="dropdown-ingredients" class="dropdown-content">
-        <li>
-          <a href="{% url 'ingredient_list' %}"><i class="fas fa-list"></i> View All Ingredients</a>
-        </li>
-        <li>
-          <a href="{% url 'add_ingredient' %}"><i class="fas fa-plus-circle"></i> Add New Ingredient</a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Tasks Dropdown -->
-    <div class="dropdown">
-      <a href="javascript:void(0)" onclick="toggleDropdown('dropdown-tasks')"><i class="fas fa-tasks"></i> Tasks</a>
-      <ul id="dropdown-tasks" class="dropdown-content">
-        <li>
-          <a href="{% url 'task_list' %}"><i class="fas fa-calendar-day"></i> View Daily Tasks</a>
-        </li>
-        <li>
-          <a href="{% url 'add_task' %}"><i class="fas fa-plus-circle"></i> Add New Task</a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Inventory (No dropdown) -->
-    <a href="{% url 'inventory_list' %}"><i class="fas fa-warehouse"></i> Inventory</a>
-
-    <!-- Suppliers (No dropdown) -->
-    <a href="{% url 'supplier_list' %}">
-      <i class="fas fa-truck"></i> Suppliers
-    </a>
-
-    <!-- Auth Buttons -->
-    <a href="{% url 'profile' %}"><i class="fas fa-user-circle"></i> Profili</a>
-    <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Dil (Logout)</a>
-  </div>
   {% else %}
-  <!-- Optionally, you can show a minimal header or nothing for anonymous users -->
+    <!-- Optionally, you can show a minimal header or nothing for anonymous users -->
   {% endif %}
 
   <!-- Main content area -->

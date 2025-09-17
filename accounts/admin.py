@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, OneTimePassword
 
 
 class ProfileInline(admin.StackedInline):
@@ -49,3 +49,11 @@ class ProfileAdmin(admin.ModelAdmin):
         return f"{obj.user.first_name} {obj.user.last_name}"
 
     get_full_name.short_description = "Full Name"
+
+
+# Register OTP model
+@admin.register(OneTimePassword)
+class OneTimePasswordAdmin(admin.ModelAdmin):
+    list_display = ("user", "code", "used", "created_at", "used_at")
+    list_filter = ("used", "created_at")
+    search_fields = ("user__username", "code")
