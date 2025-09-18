@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import Ingredient
 from .forms import IngredientForm
 import csv
 from django.http import HttpResponse
 
 # List all ingredients
+@login_required
 def ingredient_list(request):
     ingredients = Ingredient.objects.all()
     
@@ -22,6 +24,7 @@ def ingredient_list(request):
     })
 
 # Add a new ingredient
+@login_required
 def add_ingredient(request):
     if request.method == 'POST':
         form = IngredientForm(request.POST)
@@ -33,6 +36,7 @@ def add_ingredient(request):
     return render(request, 'ingredients/add_ingredient.html', {'form': form})
 
 # Edit an existing ingredient
+@login_required
 def edit_ingredient(request, pk):
     ingredient = get_object_or_404(Ingredient, pk=pk)
     if request.method == 'POST':
@@ -45,6 +49,7 @@ def edit_ingredient(request, pk):
     return render(request, 'ingredients/edit_ingredient.html', {'form': form, 'ingredient': ingredient})
 
 # Delete an ingredient
+@login_required
 def delete_ingredient(request, pk):
     ingredient = get_object_or_404(Ingredient, pk=pk)
     if request.method == 'POST':
@@ -53,6 +58,7 @@ def delete_ingredient(request, pk):
     return render(request, 'ingredients/confirm_delete.html', {'ingredient': ingredient})
 
 # Export ingredients to CSV
+@login_required
 def export_ingredients_csv(request):
     ingredients = Ingredient.objects.all()
     response = HttpResponse(content_type='text/csv')

@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .models import InventoryItem
 import csv
 
+@login_required
 def inventory_list(request):
     # Get search and status filter from GET parameters
     search = request.GET.get('search', '')
@@ -24,6 +26,7 @@ def inventory_list(request):
         'status': status_filter
     })
 
+@login_required
 def add_item(request):
     if request.method == 'POST':
         # Determine the next number for the new item
@@ -46,6 +49,7 @@ def add_item(request):
         return redirect('inventory_list')
     return render(request, 'inventory/add_inventory_item.html')
 
+@login_required
 def edit_item(request, id):
     item = get_object_or_404(InventoryItem, id=id)
     if request.method == 'POST':
@@ -59,6 +63,7 @@ def edit_item(request, id):
         return redirect('inventory_list')
     return render(request, 'inventory/edit_inventory_item.html', {'item': item})
 
+@login_required
 def delete_item(request, id):
     item = get_object_or_404(InventoryItem, id=id)
     if request.method == 'POST':
@@ -66,6 +71,7 @@ def delete_item(request, id):
         return redirect('inventory_list')
     return render(request, 'inventory/delete_inventory_item.html', {'item': item})
 
+@login_required
 def export_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="inventory.csv"'

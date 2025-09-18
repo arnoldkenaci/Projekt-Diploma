@@ -1,15 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Recipe, RecipeIngredient
 from .forms import RecipeForm, RecipeIngredientForm, RecipeIngredientFormSet
 
 
 # View for listing all recipes
+@login_required
 def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, "recipes/recipe_list.html", {"recipes": recipes})
 
 
+@login_required
 def change_recipe_status(request, pk, status):
     recipe = get_object_or_404(Recipe, pk=pk)
     if status in ["pending", "in_progress", "completed"]:
@@ -19,6 +22,7 @@ def change_recipe_status(request, pk, status):
 
 
 # View for adding a new recipe
+@login_required
 def add_recipe(request):
     form = RecipeForm(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -29,6 +33,7 @@ def add_recipe(request):
 
 
 # View for editing an existing recipe
+@login_required
 def edit_recipe(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     form = RecipeForm(request.POST or None, request.FILES or None, instance=recipe)
@@ -40,6 +45,7 @@ def edit_recipe(request, pk):
 
 
 # View for showing the details of a recipe
+@login_required
 def recipe_detail(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     ingredients = recipe.get_ingredients_list()
@@ -56,6 +62,7 @@ def recipe_detail(request, pk):
 
 
 # View for deleting a recipe
+@login_required
 def delete_recipe(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     recipe_name = recipe.name
@@ -65,6 +72,7 @@ def delete_recipe(request, pk):
 
 
 # View for updating the status of a recipe (Quick Actions)
+@login_required
 def update_status(request, pk, status):
     recipe = get_object_or_404(Recipe, pk=pk)
     if status in ["pending", "in_progress", "completed"]:
@@ -75,6 +83,7 @@ def update_status(request, pk, status):
 
 
 # View for managing recipe ingredients
+@login_required
 def manage_ingredients(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
 
@@ -101,6 +110,7 @@ def manage_ingredients(request, pk):
 
 
 # View for adding a single ingredient to a recipe
+@login_required
 def add_ingredient_to_recipe(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
 
@@ -123,6 +133,7 @@ def add_ingredient_to_recipe(request, pk):
 
 
 # View for removing an ingredient from a recipe
+@login_required
 def remove_ingredient_from_recipe(request, recipe_pk, ingredient_pk):
     recipe = get_object_or_404(Recipe, pk=recipe_pk)
     recipe_ingredient = get_object_or_404(

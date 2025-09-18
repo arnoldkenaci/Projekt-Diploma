@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import Supplier
@@ -6,6 +7,7 @@ from .forms import SupplierForm
 import csv
 
 
+@login_required
 def supplier_list(request):
     """List all suppliers with search and filtering"""
     suppliers = Supplier.objects.all()
@@ -39,6 +41,7 @@ def supplier_list(request):
     return render(request, "suppliers/supplier_list.html", context)
 
 
+@login_required
 def add_supplier(request):
     """Add a new supplier"""
     if request.method == "POST":
@@ -57,6 +60,7 @@ def add_supplier(request):
     return render(request, "suppliers/supplier_form.html", context)
 
 
+@login_required
 def edit_supplier(request, pk):
     """Edit an existing supplier"""
     supplier = get_object_or_404(Supplier, pk=pk)
@@ -84,6 +88,7 @@ def edit_supplier(request, pk):
     return render(request, "suppliers/supplier_form.html", context)
 
 
+@login_required
 def supplier_detail(request, pk):
     """Show detailed information about a supplier"""
     supplier = get_object_or_404(Supplier, pk=pk)
@@ -93,6 +98,7 @@ def supplier_detail(request, pk):
     return render(request, "suppliers/supplier_detail.html", context)
 
 
+@login_required
 def delete_supplier(request, pk):
     """Delete a supplier"""
     supplier = get_object_or_404(Supplier, pk=pk)
@@ -108,6 +114,7 @@ def delete_supplier(request, pk):
     return render(request, "suppliers/supplier_confirm_delete.html", context)
 
 
+@login_required
 def export_suppliers_csv(request):
     """Export suppliers to CSV file"""
     response = HttpResponse(content_type="text/csv")
@@ -157,6 +164,7 @@ def export_suppliers_csv(request):
     return response
 
 
+@login_required
 def toggle_supplier_status(request, pk):
     """Toggle supplier status between active and inactive"""
     supplier = get_object_or_404(Supplier, pk=pk)

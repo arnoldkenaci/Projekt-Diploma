@@ -1,5 +1,6 @@
 # dashboard/views.py
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from recipes.models import Recipe
 from ingredients.models import Ingredient
@@ -7,10 +8,8 @@ from inventory.models import InventoryItem
 from tasks.models import Task
 from suppliers.models import Supplier
 
-from django.utils import timezone
-from datetime import timedelta
 
-
+@login_required
 def dashboard(request):
     # Summary counts
     recipe_count = Recipe.objects.count()

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User  # To access users for assigning tasks
 from .models import Task
@@ -6,6 +7,7 @@ from .forms import TaskForm
 import csv
 
 # List all tasks with optional filtering
+@login_required
 def task_list(request):
     tasks = Task.objects.all()
 
@@ -19,6 +21,7 @@ def task_list(request):
     })
 
 # Add a new task
+@login_required
 def add_task(request):
     if request.method == 'POST':
         form = TaskForm(request.POST)
@@ -33,6 +36,7 @@ def add_task(request):
     })
 
 # Edit an existing task
+@login_required
 def edit_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     users = User.objects.all()  # Get all users for the 'Assign To' field
@@ -52,6 +56,7 @@ def edit_task(request, pk):
     })
 
 # Delete a task
+@login_required
 def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
@@ -64,6 +69,7 @@ def delete_task(request, pk):
     })
 
 # Export tasks to CSV
+@login_required
 def export_tasks_csv(request):
     tasks = Task.objects.all()
 
